@@ -3,15 +3,17 @@
 namespace soradore\ai;
 
 use pocketmine\entity\Entity;
+use pocketmine\entity\Zombie;
 
 class CustomZombie {
 
-	const SPEED = 0.3;
+	const SPEED = 0.2;
 
 	public $target = NULL;
 
-	public function __construct(Entity $zombie){
+	public function __construct(Entity $zombie, $target = null){
 		$this->zombie = $zombie;
+		$this->target = $target;
 	}
 
 
@@ -27,15 +29,24 @@ class CustomZombie {
 		return $this->zombie->z;
 	}
 
+    public function setPitch($deg){
+    	$this->zombie->pitch = $deg;
+    }
+
+
+    public function setYaw($deg){
+    	$this->zombie->yaw = $deg;
+    }
 
 
 	public function setTarget(){
 		$level = $this->zombie->getLevel();
-		$target = $level->getNearestEntity($this->zombie, 10); 
-		if($target instanceof $this){
+		$target = $level->getNearestEntity($this->zombie, 10);
+		if($target instanceof Zombie){
 			$target = NULL;
 		}
-        $this->target = $target;
+		$this->target = $target;
+		var_dump($target);
 		return $this->target;
 	}
 
