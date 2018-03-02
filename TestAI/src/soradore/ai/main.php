@@ -47,7 +47,8 @@ class ZombieTask extends PluginTask{
 	}
 
 	public function onRun(int $currentTick){
-	    $target = $this->zombie->getTarget();if($target == NULL) return;
+        $target = $this->zombie->getTarget();
+        if($target == NULL) return;
 
 		$tx = $target->x;
 		$tz = $target->z;
