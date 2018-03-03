@@ -39,6 +39,11 @@ class CustomZombie {
     }
 
 
+    public function getLevel(){
+        return $this->zombie->level;
+    }
+
+
     public function setTarget(){
         $level = $this->zombie->getLevel();
         $target = $level->getNearestEntity($this->zombie, 10);

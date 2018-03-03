@@ -16,6 +16,7 @@ use pocketmine\event\Listener;
 use pocketmine\level\Level;
 use pocketmine\level\Position;
 use pocketmine\math\Vector3;
+use pocketmine\block\Block;
 
 use pocketmine\scheduler\PluginTask;
 
@@ -64,6 +65,7 @@ class ZombieTask extends PluginTask{
 
     public function onRun(int $currentTick){
         $target = $this->zombie->getTarget();
+        $level = $this->zombie->getLevel();
         if($target == NULL) return;
 
         $tx = $target->x;
@@ -84,14 +86,17 @@ class ZombieTask extends PluginTask{
             $z = $tz - $cz;
         }
 
-        $rad = atan2($z, $x);
+        $rad = atan2($x, $z);
 
-        $x = CustomZombie::SPEED * cos($rad);
+        $x = CustomZombie::SPEED * sin($rad);
         $y = 0;
-        $z = CustomZombie::SPEED * sin($rad);
+        $z = CustomZombie::SPEED * cos($rad);
 
+        if($level->getBlockAt(ceil($cx + $x), ceil($this->zombie->getY()), ceil($cz + $z))->getId() !== Block::AIR){
+            $y = 1.5;
+        }
         $this->zombie->move($x, $y, $z);
-        $this->zombie->setYaw(rad2deg($rad) - 70);
+        $this->zombie->setYaw(-rad2deg($rad));
 
     }
 }
