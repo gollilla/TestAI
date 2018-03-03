@@ -25,6 +25,7 @@ class main extends PluginBase implements Listener{
 
     public function onEnable(){
         $this->getServer()->getPluginManager()->registerEvents($this, $this);
+        $this->id = [];
     }
 
     public function onDamage(\pocketmine\event\entity\EntityDamageEvent $ev){
