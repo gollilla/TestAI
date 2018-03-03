@@ -31,10 +31,10 @@ class main extends PluginBase implements Listener{
 
     public function onDamage(\pocketmine\event\entity\EntityDamageEvent $ev){
         $entity = $ev->getEntity();
-        if($entity instanceof \pocketmine\entity\Zombie){
+        if($entity instanceof \pocketmine\entity\Zombie && $ev instanceof \pocketmine\event\entity\EntityDamageByEntityEvent){
             $id = $entity->getId();
             if(!isset($this->id[$id])){
-                $zombie = new CustomZombie($entity, $ev->getDamager());
+                $zombie = new CustomZombie($entity);
                 $task = new ZombieTask($this, $zombie);
                 $this->getServer()->getScheduler()->scheduleRepeatingTask($task, 1);
                 $this->id[$id] = $task;
@@ -64,7 +64,7 @@ class ZombieTask extends PluginTask{
     }
 
     public function onRun(int $currentTick){
-        $target = $this->zombie->getTarget();
+        $target = $this->zombie->setTarget();
         $level = $this->zombie->getLevel();
         if($target == NULL) return;
 
