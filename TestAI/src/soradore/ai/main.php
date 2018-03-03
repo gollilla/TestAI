@@ -92,11 +92,32 @@ class ZombieTask extends PluginTask{
         $y = 0;
         $z = CustomZombie::SPEED * cos($rad);
 
-        if($level->getBlockAt(ceil($cx + $x), ceil($this->zombie->getY()), ceil($cz + $z))->getId() !== Block::AIR){
-            $y = 1.5;
+        if($this->getFrontBlock() !== Block::AIR && $this->getFrontBlock(1) == Block::AIR && $this->getFrontBlock(2) == Block::AIR){
+            $y = 0.5;
         }
         $this->zombie->move($x, $y, $z);
         $this->zombie->setYaw(-rad2deg($rad));
 
+    }
+
+
+    public function getFrontBlock($y = 0){
+        $return = false;
+        $level = $this->zombie->getLevel();
+        switch($this->zombie->getDirection()){
+            case 0:
+                $return = $level->getBlockAt($this->zombie->getX() + 1, $this->zombie->getY() + $y, $this->zombie->getZ())->getId();
+                break;
+            case 1:
+                $return = $level->getBlockAt($this->zombie->getX(), $this->zombie->getY() + $y, $this->zombie->getZ() + 1)->getId();
+                break;
+            case 2:
+                $return = $level->getBlockAt($this->zombie->getX() - 1, $this->zombie->getY() + $y, $this->zombie->getZ())->getId();
+                break;
+            case 3:
+                $return = $level->getBlockAt($this->zombie->getX(), $this->zombie->getY() + $y, $this->zombie->getZ() - 1)->getId();
+                break;
+        }
+        return $return;
     }
 }
