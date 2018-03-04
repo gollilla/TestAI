@@ -74,16 +74,40 @@ class ZombieTask extends PluginTask{
         $cx = $this->zombie->getX();
         $cz = $this->zombie->getZ();
 
-        if($cx < 0){
-            $x = $tx + $cx;
-        }else{
-            $x = $tx - $cx;
+        if(0 < $cx && 0 < $tx){
+            if($tx < $cx){
+                $x = -($cx - $tx);
+            }else{
+                $x = $tx - $cx;
+            }
+        }else if(0 < $cx && $tx < 0){
+            $x = -(abs($tx) + $cx);
+        }else if($cx < $0 && 0 < $tx){
+            $x = abs($cx) + $tx;
+        }else if($cx < 0 && $tx < 0){
+            if($tx < $cx){
+                $x = -($cx - $tx);
+            }else{
+                $x = $tx - $cx;
+            }
         }
 
-        if($cz < 0){
-            $z = $tz + $cz;
-        }else{
-            $z = $tz - $cz;
+        if(0 < $cz && 0 < $tz){
+            if($tz < $cz){
+                $z = -($cz - $tz);
+            }else{
+                $z = $tz - $cz;
+            }
+        }else if(0 < $cz && $tz < 0){
+            $z = -(abs($tz) + $cz);
+        }else if($cx < $0 && 0 < $tx){
+            $z = abs($cz) + $tz;
+        }else if($cz < 0 && $tz < 0){
+            if($tz < $cz){
+                $z = -($cz - $tz);
+            }else{
+                $z = $tz - $cz;
+            }
         }
 
         $rad = atan2($x, $z);
