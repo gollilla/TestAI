@@ -19,9 +19,8 @@ class CustomZombie {
     public function __construct(Entity $zombie, $target = NULL){
         $this->zombie = $zombie;
         if($target == NULL){
-            $target = $this->setTarget();
+            $this->setTarget();
         }
-        $this->target = $target;
     }
 
 
