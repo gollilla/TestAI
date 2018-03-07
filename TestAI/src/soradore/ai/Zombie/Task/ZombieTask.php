@@ -61,9 +61,12 @@ class ZombieTask extends PluginTask{
         if($this->getFrontBlock() !== Block::AIR && $this->getFrontBlock(1) == Block::AIR && $this->getFrontBlock(2) == Block::AIR){
             $y = 0.5;
         }
-        $this->zombie->move($x, $y, $z);
         $this->zombie->setYaw(-rad2deg($rad));
-
+        if($this->zombie->getDistance() <= 1){
+        	$this->zombie->attack2target(3);
+        	return;
+        }
+        $this->zombie->move($x, $y, $z);
     }
 
 

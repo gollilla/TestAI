@@ -9,6 +9,9 @@ use pocketmine\entity\Human;
 use pocketmine\level\Position;
 use pocketmine\math\Vector3;
 
+use pocketmine\event\entity\EntityDamageByEntityEvent;
+use pocketmine\event\entity\EntityDamageEvent;
+
 class CustomZombie {
 
     const SPEED = 0.2;
@@ -16,7 +19,7 @@ class CustomZombie {
     public $target = NULL;
     public $randomWalk = true;
 
-    public function __construct(Entity $zombie, $target = NULL){
+    public function __construct(Entity $zombie, Human $target = NULL){
         $this->zombie = $zombie;
         if($target == NULL){
             $this->setTarget();
@@ -56,8 +59,16 @@ class CustomZombie {
     }
 
 
-    public function attack($value = 1){
-        //TODO
+    public function attack2target($value = 1){
+        if($this->target == NULL) return;
+        $event = new EntityDamageByEntityEvent($this->zombie, $this->target, EntityDamageEvent::CAUSE_ENTITY_ATTACK, $value);
+        $this->target->attack($event);
+    }
+
+
+    public function getDistance($target = NULL){
+        if($target == NULL) $target = $this->target;
+        return sqrt($this->zombie->distance($target));
     }
 
 
