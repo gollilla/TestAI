@@ -1,0 +1,7 @@
+--- # Poggit-CI Manifest. Open the CI at https://poggit.pmmp.io/ci/soradore/TestAI
+branches:
+- master
+projects:
+  TestAI:
+    path: TestAI/
+...
