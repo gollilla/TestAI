@@ -12,7 +12,7 @@ use pocketmine\math\Vector3;
 use pocketmine\event\entity\EntityDamageByEntityEvent;
 use pocketmine\event\entity\EntityDamageEvent;
 
-class CustomZombie {
+class CustomZombie implements CustomEntity{
 
     const SPEED = 0.2;
     const DEFAULT_HEALTH = 20;
