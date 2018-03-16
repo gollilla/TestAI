@@ -20,13 +20,19 @@ use pocketmine\math\Vector3;
 use pocketmine\entity\Entity;
 
 use soradore\ai\Task\ZombieTask;
+use soradore\ai\Task\SpawnTask;
 use soradore\ai\CustomEntities\CustomZombie;
 
 class main extends PluginBase implements Listener{
 
+    public static $entityCount = 0;
+
     public function onEnable(){
         $this->getServer()->getPluginManager()->registerEvents($this, $this);
         $this->id = [];
+
+        $task = new SpawnTask($this);
+        $this->getServer()->getScheduler()->scheduleRepeatingTask($task, 20*60*2);
     }
 
     public function onDamage(\pocketmine\event\entity\EntityDamageEvent $ev){
@@ -49,13 +55,23 @@ class main extends PluginBase implements Listener{
         if(isset($this->id[$id])){
             $this->getServer()->getScheduler()->cancelTask($this->id[$id]->getTaskId());
             unset($this->id[$id]);
+            self::$entityCount--;
         }
     }
 
 
 
     public function onPlayerDeath(\pocketmine\event\player\PlayerDeathEvent $ev){
-    	$ev->setDeathMessage("");
+        $ev->setDeathMessage("");
+    }
+
+
+    public function addEntity(){
+        self::$entityCount++;
+    }
+
+    public function getEntityCount(){
+        return self::$entityCount;
     }
 }
 
