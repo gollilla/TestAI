@@ -4,9 +4,9 @@ namespace soradore\ai\CustomEntities;
 
 interface CustomEntity {
 
-	public function attack2target();
+    public function attack2target();
 
-	public function getX();
+    public function getX();
 
     public function getY();
 
