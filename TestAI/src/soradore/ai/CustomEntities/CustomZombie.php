@@ -34,6 +34,7 @@ class CustomZombie implements CustomEntity{
     public function __construct(Entity $zombie, Human $target = null, int $lv = 1){
         $this->zombie = $zombie;
         $this->lv = $lv;
+        $this->inventory = new CustomEntityInventory($this->zombie);
         /*$this->zombie->setNameTagVisible(true);
         $this->zombie->setNameTagAlwaysVisible(true);*/
         $this->setMaxHealth();
@@ -81,7 +82,8 @@ class CustomZombie implements CustomEntity{
         $lv = $this->lv;
         $value = self::DEFAULT_ATTACK_VALUE + ($lv - 1);
         if($this->target == NULL) return;
-        $event = new EntityDamageByEntityEvent($this->zombie, $this->target, EntityDamageEvent::CAUSE_ENTITY_ATTACK, $value);
+        $plus = $this->inventory->getItemInHand()->getAttackPoints();
+        $event = new EntityDamageByEntityEvent($this->zombie, $this->target, EntityDamageEvent::CAUSE_ENTITY_ATTACK, $value + $plus);
         $this->target->attack($event);
     }
 
@@ -200,7 +202,7 @@ class CustomZombie implements CustomEntity{
         //var_dump(get_class($item));
         $item = $itemEntity->getItem();
         if($item instanceof Sword){
-            $inventory = new CustomEntityInventory($this->zombie);
+            $inventory = $this->inventory;
 
             Server::getInstance()->getPluginManager()->callEvent($ev = new InventoryPickupItemEvent($inventory, $itemEntity));
             if($ev->isCancelled()){
