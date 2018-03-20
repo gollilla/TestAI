@@ -2,15 +2,25 @@
 
 namespace soradore\ai\CustomEntities;
 
+use pocketmine\Server;
+
 use pocketmine\entity\Entity;
 use pocketmine\entity\Zombie;
 use pocketmine\entity\Human;
+use pocketmine\entity\Creature;
+use pocketmine\entity\object\ItemEntity;
+use pocketmine\item\Sword;
 
 use pocketmine\level\Position;
 use pocketmine\math\Vector3;
 
 use pocketmine\event\entity\EntityDamageByEntityEvent;
 use pocketmine\event\entity\EntityDamageEvent;
+use pocketmine\event\inventory\InventoryPickupItemEvent;
+
+use pocketmine\network\mcpe\protocol\TakeItemEntityPacket;
+
+use soradore\ai\Inventory\CustomEntityInventory;
 
 class CustomZombie implements CustomEntity{
 
@@ -98,6 +108,7 @@ class CustomZombie implements CustomEntity{
 
     public function move($x, $y, $z){
         $this->zombie->move($x, $y, $z);
+        $this->checkNearItems();
     }
 
 
@@ -168,6 +179,43 @@ class CustomZombie implements CustomEntity{
         $tag .= "\n§f";
         $tag .= "     [Lv." . $lv . "] " . $this->getName();
         $this->zombie->setNameTag($tag);
+    }
+
+
+    public function checkNearItems(){
+        $level = $this->zombie->getLevel();
+        $entities = $level->getEntities();
+        if(count($entities) <= 0) return;
+        $itemEntity = null;
+        foreach ($entities as $entity) {
+            //var_dump(get_class($entity));
+            if($entity instanceof Creature) continue;
+            $distance = $this->getDistance($entity);
+            if($distance <= 1.5){
+                $itemEntity = $entity;
+            }
+        }
+
+        if(!$itemEntity instanceof ItemEntity) return;
+        //var_dump(get_class($item));
+        $item = $itemEntity->getItem();
+        if($item instanceof Sword){
+            $inventory = new CustomEntityInventory($this->zombie);
+
+            Server::getInstance()->getPluginManager()->callEvent($ev = new InventoryPickupItemEvent($inventory, $itemEntity));
+            if($ev->isCancelled()){
+                return;
+            }
+            $pk = new TakeItemEntityPacket();
+            $pk->eid = $this->zombie->getId();
+            $pk->target = $itemEntity->getId();
+            Server::getInstance()->broadcastPacket($itemEntity->getViewers(), $pk);
+
+            $inventory->addItem($item);
+            $inventory->setItemInHand($item);
+            $inventory->sendHeldItem($this->zombie->getViewers());
+            $itemEntity->flagForDespawn();
+        }
     }
 
 }
