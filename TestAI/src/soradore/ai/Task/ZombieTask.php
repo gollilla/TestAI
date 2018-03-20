@@ -11,6 +11,10 @@ use soradore\ai\CustomEntities\CustomZombie;
 
 class ZombieTask extends PluginTask{
 
+    public $zombie = null;
+    public $move = false;
+
+
     public function __construct(PluginBase $plugin, CustomZombie $zombie){
         $this->zombie = $zombie;
         parent::__construct($plugin);
@@ -20,6 +24,11 @@ class ZombieTask extends PluginTask{
         $target = $this->zombie->setTarget();
         $level = $this->zombie->getWorld();
         if($target == NULL) return;
+
+        if(!$this->move){
+            $this->move = true;
+            return;
+        }
 
         $tx = $target->x;
         $tz = $target->z;
@@ -70,6 +79,11 @@ class ZombieTask extends PluginTask{
         }
         $this->zombie->move($x, $y, $z);
         $this->zombie->setNameTag();
+    }
+
+
+    public function setMove(bool $val = true){
+        $this->move = $val;
     }
 
 }

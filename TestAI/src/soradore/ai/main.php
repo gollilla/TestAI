@@ -44,8 +44,11 @@ class main extends PluginBase implements Listener{
                 $task = new ZombieTask($this, $zombie);
                 $this->getServer()->getScheduler()->scheduleRepeatingTask($task, 1);
                 $this->id[$id] = $task;
+            }else{
+                $this->id[$id]->setMove(false);
             }
-            $ev->setKnockBack(0);
+            //$ev->setKnockBack(0);
+
         }
     }
 
