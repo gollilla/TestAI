@@ -51,7 +51,7 @@ class main extends PluginBase implements Listener{
             if(!isset($this->id[$id])){
                 $zombie = new CustomZombie($entity, null, rand(1, 4));
                 $task = new ZombieTask($this, $zombie);
-                $this->getServer()->getScheduler()->scheduleRepeatingTask($task, 1);
+                $this->getScheduler()->scheduleRepeatingTask($task, 1);
                 $this->id[$id] = $task;
             }else{
                 $this->id[$id]->setMove(false);
@@ -65,7 +65,7 @@ class main extends PluginBase implements Listener{
         $entity = $ev->getEntity();
         $id = $entity->getId();
         if(isset($this->id[$id])){
-            $this->getServer()->getScheduler()->cancelTask($this->id[$id]->getTaskId());
+            $this->getScheduler()->cancelTask($this->id[$id]->getTaskId());
             unset($this->id[$id]);
             self::$entityCount--;
         }
