@@ -29,7 +29,7 @@ class CustomZombie implements CustomEntity{
     const DEFAULT_ATTACK_VALUE = 3;
 
     public $target = null;
-    public $randomWalk = true;
+    public $randomWalk = true;  //TODO
 
     public function __construct(Entity $zombie, Human $target = null, int $lv = 1){
         $this->zombie = $zombie;

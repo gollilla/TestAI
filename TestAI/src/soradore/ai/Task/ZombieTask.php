@@ -2,22 +2,26 @@
 
 namespace soradore\ai\Task;
 
-use pocketmine\scheduler\PluginTask;
+use pocketmine\scheduler\Task;
 use pocketmine\plugin\PluginBase;
 
 use pocketmine\block\Block;
 
 use soradore\ai\CustomEntities\CustomZombie;
 
-class ZombieTask extends PluginTask{
+class ZombieTask extends Task{
 
     public $zombie = null;
-    public $move = false;
+    public $move = true;
 
 
     public function __construct(PluginBase $plugin, CustomZombie $zombie){
         $this->zombie = $zombie;
-        parent::__construct($plugin);
+        $this->owner = $plugin;
+    }
+
+    public function getOwner(){
+        return $this->owner;
     }
 
     public function onRun(int $currentTick){
@@ -82,6 +86,11 @@ class ZombieTask extends PluginTask{
     }
 
 
+    /**
+     *
+     *  To stopping few time.
+     *
+     */
     public function setMove(bool $val = true){
         $this->move = $val;
     }

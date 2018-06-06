@@ -18,6 +18,7 @@ use pocketmine\level\Position;
 use pocketmine\math\Vector3;
 
 use pocketmine\entity\Entity;
+use pocketmine\utils\Config;
 
 use soradore\ai\Task\ZombieTask;
 use soradore\ai\Task\SpawnTask;
@@ -32,7 +33,15 @@ class main extends PluginBase implements Listener{
         $this->id = [];
 
         $task = new SpawnTask($this);
-        $this->getServer()->getScheduler()->scheduleRepeatingTask($task, 20*60*2);
+        $this->getScheduler()->scheduleRepeatingTask($task, 20*60*2);
+        if(!file_exists($this->getDataFolder())){
+            mkdir($this->getDataFolder(), 0744);
+        }
+
+        $this->setting = new Config($this->getDataFolder() . "setting.yml", Config::YAML,
+                                   [
+                                    "ignition_in_the_day"=>false,
+                                    ]);
     }
 
     public function onDamage(\pocketmine\event\entity\EntityDamageEvent $ev){

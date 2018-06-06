@@ -2,20 +2,22 @@
 
 namespace soradore\ai\Task;
 
-use pocketmine\scheduler\PluginTask;
+use pocketmine\scheduler\Task;
 //use pocketmine\entity\Zombie;
 use pocketmine\entity\Entity;
 use pocketmine\entity\Human;
 use pocketmine\math\Vector3;
 
-class SpawnTask extends PluginTask {
+class SpawnTask extends Task {
 
     const MAX_ENTITY_COUNT = 10;
     public function __construct($plugin){
-        parent::__construct($plugin);
+        $this->owner = $plugin;
     }
 
-
+    public function getOwner(){
+        return $this->owner;
+    }
     public function onRun(int $tick){
         /*$entityCount = $this->getOwner()->getEntityCount();
         if($entityCount == self::MAX_ENTITY_COUNT) return;*/
