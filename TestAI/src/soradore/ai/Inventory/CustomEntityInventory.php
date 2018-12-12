@@ -2,7 +2,7 @@
 
 namespace soradore\ai\Inventory;
 
-use pocketmine\inventory\EntityInventory;
+use pocketmine\inventory\BaseInventory;
 use pocketmine\entity\Entity;
 use pocketmine\item\Item;
 use pocketmine\Server;
@@ -11,12 +11,12 @@ use pocketmine\network\mcpe\protocol\InventoryContentPacket;
 use pocketmine\network\mcpe\protocol\MobEquipmentPacket;
 use pocketmine\network\mcpe\protocol\types\ContainerIds;
 
-class CustomEntityInventory extends EntityInventory {
+class CustomEntityInventory extends BaseInventory {
 
 	protected $itemInHandIndex = 0;
 
 	public function __construct(Entity $holder){
-		parent::__construct($holder);
+		parent::__construct();
 		$this->holder = $holder;
 	}
 
